@@ -10,82 +10,101 @@ import { getTemplateById, templates } from '../data/templates'
 
 const WA_NUMBER = '966502779766'
 
-function formatArabicDate(dateStr) {
+function formatDate(dateStr) {
   if (!dateStr) return ''
   try {
-    return new Intl.DateTimeFormat('ar-SA', {
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+    return new Intl.DateTimeFormat('ar-u-ca-gregory', {
+      day: 'numeric', month: 'long', year: 'numeric',
     }).format(new Date(dateStr + 'T12:00:00'))
   } catch {
     return dateStr
   }
 }
 
-function buildWhatsAppMessage(templateId, formData) {
-  const nameMap = { wedding: 'دعوة زواج', graduation: 'دعوة تخرج', custom: 'تصميم مخصص' }
-  const name = nameMap[templateId] || 'دعوة'
-  let msg = `السلام عليكم، أرغب في طلب *${name}* من لقاء 🤍\n\n`
-  msg += `━━━━━━━━━━━━━━━\n`
+function line(label, value) {
+  if (!value || !String(value).trim()) return null
+  return `${label}: ${String(value).trim()}`
+}
 
+function buildWhatsAppMessage(templateId, formData) {
   if (templateId === 'wedding') {
-    const city = formData.city === 'أخرى' ? (formData.customCity || '') : formData.city
-    const music = formData.musicChoice === 'custom' ? 'رابط موسيقى مخصص' : 'موسيقى القالب'
-    const rows = [
-      ['اسم العريس',           formData.groomName],
-      ['اسم العروس',           formData.brideName],
-      ['اسم الداعي',           formData.hostName],
-      ['تاريخ الحفل',          formatArabicDate(formData.weddingDate)],
-      ['وقت الحفل',            formData.weddingTime],
-      ['اسم القاعة أو المكان', formData.venueName],
-      ['المدينة',              city],
-      ['رابط الموقع',          formData.locationUrl],
-      ['وقت استقبال الضيوف',  formData.receptionTime],
-      ['وقت الزفة',            formData.zaffaTime],
-      ['وقت العشاء',           formData.dinnerTime],
-      ['الموسيقى',             music],
-      ['رابط الموسيقى',        formData.musicChoice === 'custom' ? formData.musicUrl : null],
+    const city = formData.city === 'أخرى' ? formData.customCity : formData.city
+    const musicLabel = formData.musicChoice === 'custom' ? 'رابط موسيقى مخصص' : 'موسيقى القالب'
+    const lines = [
+      'السلام عليكم، أرغب في طلب قالب دعوة زواج من لقاء 🤍',
+      '',
+      line('اسم العريس',  formData.groomName),
+      line('اسم العروس',  formData.brideName),
+      line('اسم الداعي',  formData.hostName),
+      line('التاريخ',     formatDate(formData.weddingDate)),
+      line('وقت الحفل',   formData.weddingTime),
+      line('المكان',      formData.venueName),
+      line('المدينة',     city),
+      line('رابط الموقع', formData.locationUrl),
+      '',
+      'برنامج الحفل:',
+      line('الاستقبال',   formData.receptionTime),
+      line('الزفة',       formData.zaffaTime),
+      line('العشاء',      formData.dinnerTime),
+      '',
+      line('الموسيقى',       musicLabel),
+      formData.musicChoice === 'custom' ? line('رابط الموسيقى', formData.musicUrl) : null,
+      '',
+      'السعر: 200 ريال',
     ]
-    rows.forEach(([label, val]) => { if (val) msg += `*${label}:* ${val}\n` })
-  } else if (templateId === 'graduation') {
-    const gradMusic = formData.musicChoice === 'custom' ? 'رابط موسيقى مخصص' : 'موسيقى القالب'
-    const rows = [
-      ['اسم الخريج / الخريجة', formData.graduateName],
-      ['الجامعة أو المدرسة',   formData.university],
-      ['التخصص أو المرحلة',    formData.major],
-      ['سنة التخرج',           formData.graduationYear],
-      ['تاريخ الحفل',          formData.eventDate],
-      ['وقت الحفل',            formData.eventTime],
-      ['اسم المكان',           formData.venueName],
-      ['رابط الموقع',          formData.locationUrl],
-      ['اسم الداعي',           formData.hostName],
-      ['الموسيقى',             gradMusic],
-      ['رابط الموسيقى',        formData.musicChoice === 'custom' ? formData.musicUrl : null],
-    ]
-    rows.forEach(([label, val]) => { if (val) msg += `*${label}:* ${val}\n` })
-  } else {
-    const customMusic = formData.musicChoice === 'custom' ? 'رابط موسيقى مخصص' : 'بدون موسيقى / اختيار لاحق'
-    const rows = [
-      ['نوع المناسبة',          formData.occasionType],
-      ['اسم المناسبة / صاحبها', formData.occasionName],
-      ['اسم الداعي',            formData.hostName],
-      ['تاريخ المناسبة',        formData.eventDate],
-      ['وقت المناسبة',          formData.eventTime],
-      ['اسم المكان',            formData.venueName],
-      ['رابط الموقع',           formData.locationUrl],
-      ['الموسيقى',              customMusic],
-      ['رابط الموسيقى',         formData.musicChoice === 'custom' ? formData.musicUrl : null],
-      ['وصف التصميم',           formData.designIdea],
-      ['الألوان المفضلة',       formData.preferredColors],
-      ['رابط إلهام',            formData.inspirationUrl],
-      ['صورة إلهام',            formData.inspirationFile ? `(سيتم إرسالها في رسالة منفصلة): ${formData.inspirationFile}` : null],
-      ['ملاحظات إضافية',        formData.additionalDetails],
-      ['رقم الجوال',            formData.contactPhone],
-    ]
-    rows.forEach(([label, val]) => { if (val) msg += `*${label}:* ${val}\n` })
+    return lines.filter(l => l !== null).join('\n')
   }
 
-  msg += `━━━━━━━━━━━━━━━\n`
-  return msg
+  if (templateId === 'graduation') {
+    const musicLabel = formData.musicChoice === 'custom' ? 'رابط موسيقى مخصص' : 'موسيقى القالب'
+    const lines = [
+      'السلام عليكم، أرغب في طلب قالب دعوة تخرج من لقاء 🤍',
+      '',
+      line('اسم الخريج أو الخريجة', formData.graduateName),
+      line('الجامعة أو المدرسة',    formData.university),
+      line('التخصص أو المرحلة',     formData.major),
+      line('سنة التخرج',            formData.graduationYear),
+      line('التاريخ',               formatDate(formData.eventDate)),
+      line('وقت الحفل',             formData.eventTime),
+      line('المكان',                formData.venueName),
+      line('رابط الموقع',           formData.locationUrl),
+      line('اسم الداعي',            formData.hostName),
+      '',
+      line('الموسيقى',       musicLabel),
+      formData.musicChoice === 'custom' ? line('رابط الموسيقى', formData.musicUrl) : null,
+      '',
+      'السعر: 150 ريال',
+    ]
+    return lines.filter(l => l !== null).join('\n')
+  }
+
+  // custom
+  const musicLabel = formData.musicChoice === 'custom' ? 'رابط موسيقى مخصص' : 'بدون موسيقى / اختيار لاحق'
+  const lines = [
+    'السلام عليكم، أرغب في طلب تصميم دعوة خاصة من لقاء 🤍',
+    '',
+    line('نوع المناسبة',  formData.occasionType),
+    line('اسم المناسبة',  formData.occasionName),
+    line('اسم الداعي',   formData.hostName),
+    line('التاريخ',      formatDate(formData.eventDate)),
+    line('الوقت',        formData.eventTime),
+    line('المكان',       formData.venueName),
+    line('رابط الموقع',  formData.locationUrl),
+    '',
+    'تفاصيل التصميم:',
+    line('الألوان',      formData.preferredColors),
+    line('وصف الفكرة',   formData.designIdea),
+    '',
+    line('الموسيقى',       musicLabel),
+    formData.musicChoice === 'custom' ? line('رابط الموسيقى', formData.musicUrl) : null,
+    formData.inspirationUrl ? line('رابط الإلهام', formData.inspirationUrl) : null,
+    formData.inspirationFile ? `صورة إلهام: ${formData.inspirationFile} (سيتم إرسالها بشكل منفصل)` : null,
+    formData.additionalDetails ? line('ملاحظات', formData.additionalDetails) : null,
+    formData.contactPhone ? line('رقم الجوال', formData.contactPhone) : null,
+    '',
+    'السعر: يبدأ من 300 ريال',
+  ]
+  return lines.filter(l => l !== null).join('\n')
 }
 
 const STEPS = [

@@ -5,7 +5,7 @@ import { Eye, MousePointerClick, Clock, X } from 'lucide-react'
 import SectionTitle from '../ui/SectionTitle'
 import { templates } from '../../data/templates'
 
-function CardPhoneMockup({ src, title }) {
+function CardPhoneMockup({ src, poster, title }) {
   return (
     <div
       className="relative w-full flex items-center justify-center"
@@ -14,7 +14,6 @@ function CardPhoneMockup({ src, title }) {
         background: 'linear-gradient(160deg, #FDF9F5 0%, #F3E4DD 65%, #E8D2C6 100%)',
       }}
     >
-      {/* Glow behind phone */}
       <div
         style={{
           position: 'absolute', top: '50%', left: '50%',
@@ -26,7 +25,6 @@ function CardPhoneMockup({ src, title }) {
         }}
       />
 
-      {/* Mini iPhone */}
       <div
         style={{
           position: 'relative', zIndex: 1,
@@ -41,14 +39,12 @@ function CardPhoneMockup({ src, title }) {
             'inset 0 0 0 1px rgba(255,255,255,0.10)',
         }}
       >
-        {/* Screen */}
         <div
           style={{
             position: 'relative', width: '100%', height: '100%',
             background: '#000', borderRadius: 23, overflow: 'hidden',
           }}
         >
-          {/* Dynamic Island */}
           <div
             style={{
               position: 'absolute', top: 6, left: '50%',
@@ -59,8 +55,14 @@ function CardPhoneMockup({ src, title }) {
               boxShadow: '0 0 0 1px rgba(255,255,255,0.05)',
             }}
           />
+          {poster && (
+            <img
+              src={poster} alt="" aria-hidden="true"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          )}
           <video
-            autoPlay muted loop playsInline
+            autoPlay muted loop playsInline preload="metadata"
             aria-label={`معاينة ${title}`}
             style={{
               position: 'absolute', inset: 0,
@@ -141,7 +143,7 @@ function TemplateCard({ template, index }) {
       >
         {/* Phone mockup area */}
         <div className="overflow-hidden rounded-t-3xl">
-          <CardPhoneMockup src={template.videoMp4} title={template.name} />
+          <CardPhoneMockup src={template.videoWeb} poster={template.poster} title={template.name} />
         </div>
 
         {/* Template info */}

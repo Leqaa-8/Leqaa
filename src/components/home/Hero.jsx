@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Star, Clock, Heart, Zap, Sparkles } from 'lucide-react'
 
 const WA_LINK = 'https://wa.me/966502779766?text=' + encodeURIComponent('السلام عليكم، أرغب في طلب دعوة رقمية من لقاء 🤍')
 
 const VIDEOS = [
-  { src: '/video.w.mp4', label: 'دعوة زواج' },
-  { src: '/video.g.mp4', label: 'دعوة تخرج' },
+  { src: '/video/video.w.web.mp4', poster: '/images/poster-w.jpg', label: 'دعوة زواج' },
+  { src: '/video/video.g.web.mp4', poster: '/images/poster-g.jpg', label: 'دعوة تخرج' },
 ]
 
 const FEATURES = [
@@ -27,16 +27,82 @@ function scrollToSection(id) {
   if (el) el.scrollIntoView({ behavior: 'smooth' })
 }
 
+function PhoneVideo({ src, poster }) {
+  const videoRef = useRef(null)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    setLoaded(false)
+    v.load()
+    v.play().catch(() => {})
+  }, [src])
+
+  return (
+    <>
+      <img
+        src={poster}
+        alt=""
+        aria-hidden="true"
+        style={{
+          position: 'absolute', inset: 0,
+          width: '100%', height: '100%',
+          objectFit: 'cover',
+          opacity: loaded ? 0 : 1,
+          transition: 'opacity 0.5s ease',
+        }}
+      />
+      <video
+        ref={videoRef}
+        autoPlay muted loop playsInline
+        preload="metadata"
+        onLoadedData={() => setLoaded(true)}
+        style={{
+          position: 'absolute', inset: 0,
+          width: '100%', height: '100%',
+          objectFit: 'cover', display: 'block',
+          opacity: loaded ? 1 : 0,
+          transition: 'opacity 0.5s ease',
+        }}
+      >
+        <source src={src} type="video/mp4" />
+      </video>
+    </>
+  )
+}
+
 export default function Hero() {
   const [current, setCurrent] = useState(0)
+  const sectionRef = useRef(null)
 
   useEffect(() => {
     const t = setInterval(() => setCurrent(p => (p + 1) % VIDEOS.length), 5000)
     return () => clearInterval(t)
   }, [])
 
+  // Pause videos when section scrolls off screen
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        el.querySelectorAll('video').forEach(v => {
+          if (entry.isIntersecting) {
+            v.play().catch(() => {})
+          } else {
+            v.pause()
+          }
+        })
+      },
+      { threshold: 0.15 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-gradient-luxury">
+    <section ref={sectionRef} className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-gradient-luxury">
       {/* Background glows */}
       <div className="absolute top-1/3 left-1/4 w-[700px] h-[700px] bg-primary/[0.07] rounded-full blur-[130px] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blush/60 rounded-full blur-[80px] pointer-events-none" />
@@ -61,10 +127,9 @@ export default function Hero() {
       <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 pt-28 pb-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
 
-          {/* ── Text: DOM 1 → right column in RTL desktop, bottom on mobile ── */}
+          {/* ── Text ── */}
           <div className="order-2 lg:order-1 flex flex-col items-center lg:items-start text-center lg:text-right">
 
-            {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -75,7 +140,6 @@ export default function Hero() {
               دعوات رقمية تفاعلية فاخرة
             </motion.div>
 
-            {/* Heading */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -102,7 +166,6 @@ export default function Hero() {
               </span>
             </motion.h1>
 
-            {/* Subtitle */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -112,7 +175,6 @@ export default function Hero() {
               لقاء منصة متخصصة في تصميم الدعوات الرقمية التفاعلية للمناسبات، بقوالب راقية وتجربة مصممة لتبقى في الذاكرة.
             </motion.p>
 
-            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -135,7 +197,6 @@ export default function Hero() {
               </a>
             </motion.div>
 
-            {/* Features grid */}
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
@@ -153,7 +214,7 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* ── iPhone Mockup: DOM 2 → left column in RTL desktop, top on mobile ── */}
+          {/* ── iPhone Mockup ── */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -161,7 +222,6 @@ export default function Hero() {
             className="order-1 lg:order-2 flex justify-center items-center py-4"
           >
             <div className="relative">
-              {/* Glow */}
               <div
                 style={{
                   position: 'absolute', inset: -24,
@@ -187,7 +247,6 @@ export default function Hero() {
                     'inset 0 1px 0 rgba(255,255,255,0.16)',
                 }}
               >
-                {/* Decorative side buttons */}
                 <div style={{ position:'absolute', left:-3, top:88,  width:3, height:36, background:'#2a2a2a', borderRadius:'2px 0 0 2px' }} />
                 <div style={{ position:'absolute', left:-3, top:136, width:3, height:64, background:'#2a2a2a', borderRadius:'2px 0 0 2px' }} />
                 <div style={{ position:'absolute', right:-3, top:108, width:3, height:68, background:'#2a2a2a', borderRadius:'0 2px 2px 0' }} />
@@ -211,22 +270,12 @@ export default function Hero() {
                     }}
                   />
 
-                  {/* Videos — both mounted, cross-fade via opacity */}
-                  {VIDEOS.map((v, i) => (
-                    <motion.div
-                      key={v.src}
-                      animate={{ opacity: i === current ? 1 : 0 }}
-                      transition={{ duration: 0.9, ease: 'easeInOut' }}
-                      style={{ position: 'absolute', inset: 0 }}
-                    >
-                      <video
-                        autoPlay muted loop playsInline
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                      >
-                        <source src={v.src} type="video/mp4" />
-                      </video>
-                    </motion.div>
-                  ))}
+                  {/* Single active video with poster */}
+                  <PhoneVideo
+                    key={VIDEOS[current].src}
+                    src={VIDEOS[current].src}
+                    poster={VIDEOS[current].poster}
+                  />
 
                   {/* Label badge */}
                   <motion.div

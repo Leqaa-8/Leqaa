@@ -10,9 +10,8 @@ export const templates = [
     price: '200 ريال',
     deliveryTime: '٢٤–٤٨ ساعة',
     icon: '💍',
-    // الفيديوهات موجودة في public/ وتُخدَم كـ static assets
-    videoMp4: '/video.w.mp4',   // MP4 أولاً — يعمل على Chrome/Firefox/Safari
-    videoMov: '/video.w.mov',   // MOV كـ fallback — Safari فقط
+    videoWeb: '/video/video.w.web.mp4',
+    poster: '/images/poster-w.jpg',
     previewUrl: 'https://leqaa-8.github.io/abdulaziz-ameerah/',
   },
   {
@@ -26,8 +25,8 @@ export const templates = [
     price: '150 ريال',
     deliveryTime: '٢٤–٤٨ ساعة',
     icon: '🎓',
-    videoMp4: '/video.g.mp4',
-    videoMov: '/video.g.mov',
+    videoWeb: '/video/video.g.web.mp4',
+    poster: '/images/poster-g.jpg',
     previewUrl: 'https://leqaa-8.github.io/graduation/',
   },
 ]

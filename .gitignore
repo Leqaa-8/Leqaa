@@ -25,5 +25,5 @@ npm-debug.log*
 .claude
 
 # Root-level originals (not served by app — app uses public/ and src/assets/)
-video
-image
+/video
+/image

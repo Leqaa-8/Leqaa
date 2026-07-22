@@ -5,34 +5,31 @@ import { Eye, MousePointerClick, Clock, ArrowRight, X } from 'lucide-react'
 import SectionTitle from '../components/ui/SectionTitle'
 import { templates } from '../data/templates'
 
-function TemplateVideoPreview({ src, fallbackMov, title }) {
+function TemplateVideoPreview({ src, poster, title }) {
   return (
     <div className="relative w-full overflow-hidden bg-blush" style={{ height: 320 }}>
+      {poster && (
+        <img
+          src={poster} alt="" aria-hidden="true"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      )}
       <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
+        autoPlay muted loop playsInline preload="metadata"
         aria-label={`معاينة فيديو ${title}`}
         style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          display: 'block',
+          position: 'absolute', inset: 0,
+          width: '100%', height: '100%',
+          objectFit: 'cover', display: 'block',
         }}
       >
         <source src={src} type="video/mp4" />
-        <source src={fallbackMov} type="video/quicktime" />
-        <p className="sr-only">متصفحك لا يدعم تشغيل الفيديو.</p>
       </video>
     </div>
   )
 }
 
-function VideoModal({ src, fallbackMov, title, onClose }) {
+function VideoModal({ src, title, onClose }) {
   return (
     <AnimatePresence>
       <motion.div
@@ -58,12 +55,11 @@ function VideoModal({ src, fallbackMov, title, onClose }) {
             <X size={17} />
           </button>
           <video
-            autoPlay loop muted playsInline preload="auto"
+            autoPlay loop muted playsInline preload="metadata"
             aria-label={`معاينة ${title}`}
             style={{ display: 'block', width: '100%', aspectRatio: '9/16', objectFit: 'cover' }}
           >
             <source src={src} type="video/mp4" />
-            <source src={fallbackMov} type="video/quicktime" />
           </video>
           <div className="p-4 text-center">
             <p className="text-text font-semibold font-arabic text-sm">{title}</p>
@@ -96,8 +92,8 @@ function TemplateCard({ template, index }) {
       >
         <div className="overflow-hidden rounded-t-3xl">
           <TemplateVideoPreview
-            src={template.videoMp4}
-            fallbackMov={template.videoMov}
+            src={template.videoWeb}
+            poster={template.poster}
             title={template.name}
           />
         </div>
@@ -146,8 +142,7 @@ function TemplateCard({ template, index }) {
 
       {modalOpen && (
         <VideoModal
-          src={template.videoMp4}
-          fallbackMov={template.videoMov}
+          src={template.videoWeb}
           title={template.name}
           onClose={() => setModalOpen(false)}
         />
