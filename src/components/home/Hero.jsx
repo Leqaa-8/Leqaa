@@ -258,18 +258,6 @@ export default function Hero() {
                     background: '#000', borderRadius: 40, overflow: 'hidden',
                   }}
                 >
-                  {/* Dynamic Island */}
-                  <div
-                    style={{
-                      position: 'absolute', top: 12, left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: 96, height: 30,
-                      background: '#000', borderRadius: 20,
-                      zIndex: 20,
-                      boxShadow: '0 0 0 1.5px rgba(255,255,255,0.06)',
-                    }}
-                  />
-
                   {/* Single active video with poster */}
                   <PhoneVideo
                     key={VIDEOS[current].src}
