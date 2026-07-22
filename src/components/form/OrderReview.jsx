@@ -35,7 +35,6 @@ function WeddingReview({ data }) {
       <ReviewRow label="اسم العروس"            value={data.brideName} />
       <ReviewRow label="اسم الداعي"            value={data.hostName} />
       <ReviewRow label="تاريخ الحفل"           value={formatArabicDate(data.weddingDate)} />
-      <ReviewRow label="وقت الحفل"             value={data.weddingTime} />
       <ReviewRow label="اسم القاعة أو المكان"  value={data.venueName} />
       <ReviewRow label="المدينة"               value={city} />
       <ReviewRow label="رابط الموقع"           value={data.locationUrl} />
@@ -52,6 +51,7 @@ function WeddingReview({ data }) {
 
 function GraduationReview({ data }) {
   const musicLabel = data.musicChoice === 'custom' ? 'رابط موسيقى مخصص' : 'موسيقى القالب'
+  const city = data.city === 'أخرى' ? (data.customCity || '') : data.city
 
   return (
     <>
@@ -62,6 +62,7 @@ function GraduationReview({ data }) {
       <ReviewRow label="تاريخ الحفل"           value={data.eventDate} />
       <ReviewRow label="وقت الحفل"             value={data.eventTime} />
       <ReviewRow label="اسم المكان"            value={data.venueName} />
+      <ReviewRow label="المدينة"               value={city} />
       <ReviewRow label="رابط الموقع"           value={data.locationUrl} />
       <ReviewRow label="اسم الداعي"            value={data.hostName} />
       <ReviewRow label="الموسيقى"              value={musicLabel} />

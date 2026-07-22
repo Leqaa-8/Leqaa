@@ -2,12 +2,6 @@ import FormField, { Input, SelectField, MusicCard, isValidUrl } from './FormFiel
 
 const TODAY = new Date().toISOString().split('T')[0]
 
-const PARTY_TIMES = [
-  '5:00 مساءً','5:30 مساءً','6:00 مساءً','6:30 مساءً','7:00 مساءً',
-  '7:30 مساءً','8:00 مساءً','8:30 مساءً','9:00 مساءً','9:30 مساءً',
-  '10:00 مساءً','10:30 مساءً','11:00 مساءً',
-]
-
 const RECEPTION_TIMES = [
   '5:00 مساءً','5:30 مساءً','6:00 مساءً','6:30 مساءً','7:00 مساءً',
   '7:30 مساءً','8:00 مساءً','8:30 مساءً','9:00 مساءً','9:30 مساءً','10:00 مساءً',
@@ -65,29 +59,18 @@ export default function WeddingForm({ data, onChange, errors = {} }) {
         <Input name="hostName" placeholder="عائلة العريس" value={data.hostName || ''} onChange={handle} />
       </FormField>
 
-      {/* ── Date & Time ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FormField label="تاريخ الحفل" required error={errors.weddingDate}>
-          <input
-            type="date"
-            name="weddingDate"
-            value={data.weddingDate || ''}
-            onChange={handle}
-            min={TODAY}
-            className="luxury-input"
-            style={{ direction: 'ltr', textAlign: 'left' }}
-          />
-        </FormField>
-        <FormField label="وقت الحفل" required error={errors.weddingTime}>
-          <SelectField
-            name="weddingTime"
-            value={data.weddingTime}
-            onChange={handle}
-            options={PARTY_TIMES}
-            placeholder="اختر وقت الحفل"
-          />
-        </FormField>
-      </div>
+      {/* ── Date ── */}
+      <FormField label="تاريخ الحفل" required error={errors.weddingDate}>
+        <input
+          type="date"
+          name="weddingDate"
+          value={data.weddingDate || ''}
+          onChange={handle}
+          min={TODAY}
+          className="luxury-input"
+          style={{ direction: 'ltr', textAlign: 'left' }}
+        />
+      </FormField>
 
       {/* ── Venue & City ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -61,9 +61,21 @@
 
   input[type="date"].luxury-input {
     height: 3.5rem;
+    min-height: unset;
+    max-height: 3.5rem;
     padding-top: 0;
     padding-bottom: 0;
     line-height: 3.5rem;
+  }
+
+  .phone-mockup-frame {
+    width: clamp(280px, 78vw, 340px);
+  }
+
+  @media (min-width: 640px) {
+    .phone-mockup-frame {
+      width: clamp(150px, 32vw, 240px);
+    }
   }
 
   .section-scroll-offset {

@@ -233,9 +233,9 @@ export default function Hero() {
 
               {/* iPhone 16 Pro frame */}
               <div
+                className="phone-mockup-frame"
                 style={{
                   position: 'relative', zIndex: 1,
-                  width: 'clamp(150px, 32vw, 240px)',
                   aspectRatio: '9/19.5',
                   background: 'linear-gradient(145deg, #2e2e2e 0%, #1c1c1c 50%, #252525 100%)',
                   borderRadius: 48,

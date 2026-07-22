@@ -37,7 +37,6 @@ function buildWhatsAppMessage(templateId, formData) {
       line('اسم العروس',  formData.brideName),
       line('اسم الداعي',  formData.hostName),
       line('التاريخ',     formatDate(formData.weddingDate)),
-      line('وقت الحفل',   formData.weddingTime),
       line('المكان',      formData.venueName),
       line('المدينة',     city),
       line('رابط الموقع', formData.locationUrl),
@@ -57,6 +56,7 @@ function buildWhatsAppMessage(templateId, formData) {
 
   if (templateId === 'graduation') {
     const musicLabel = formData.musicChoice === 'custom' ? 'رابط موسيقى مخصص' : 'موسيقى القالب'
+    const gradCity = formData.city === 'أخرى' ? formData.customCity : formData.city
     const lines = [
       'السلام عليكم، أرغب في طلب قالب دعوة تخرج من لقاء 🤍',
       '',
@@ -67,6 +67,7 @@ function buildWhatsAppMessage(templateId, formData) {
       line('التاريخ',               formatDate(formData.eventDate)),
       line('وقت الحفل',             formData.eventTime),
       line('المكان',                formData.venueName),
+      line('المدينة',               gradCity),
       line('رابط الموقع',           formData.locationUrl),
       line('اسم الداعي',            formData.hostName),
       '',
@@ -225,15 +226,16 @@ export default function OrderForm() {
         const musicOk = (formData.musicChoice !== 'custom') || !!formData.musicUrl
         return !!(
           formData.groomName && formData.brideName &&
-          formData.weddingDate && formData.weddingTime &&
+          formData.weddingDate &&
           formData.venueName && cityOk &&
           formData.receptionTime && formData.zaffaTime && formData.dinnerTime &&
           musicOk
         )
       }
       if (templateId === 'graduation') {
+        const cityOk = formData.city && (formData.city !== 'أخرى' || !!formData.customCity)
         const musicOk = (formData.musicChoice !== 'custom') || !!formData.musicUrl
-        return !!(formData.graduateName && formData.university && formData.major && formData.graduationYear && formData.eventDate && formData.eventTime && formData.venueName && musicOk)
+        return !!(formData.graduateName && formData.university && formData.major && formData.graduationYear && formData.eventDate && formData.eventTime && formData.venueName && cityOk && musicOk)
       }
       if (templateId === 'custom') {
         const musicOk = (formData.musicChoice !== 'custom') || !!formData.musicUrl

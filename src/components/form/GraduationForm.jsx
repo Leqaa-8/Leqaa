@@ -6,6 +6,11 @@ const EVENT_TIMES = [
   '10:00 مساءً','10:30 مساءً','11:00 مساءً',
 ]
 
+const CITIES = [
+  'الرياض','جدة','مكة المكرمة','المدينة المنورة',
+  'الطائف','الدمام','الخبر','أخرى',
+]
+
 export default function GraduationForm({ data, onChange }) {
   const handle = (e) => onChange({ ...data, [e.target.name]: e.target.value })
 
@@ -65,6 +70,23 @@ export default function GraduationForm({ data, onChange }) {
         <FormField label="اسم المكان" required>
           <Input name="venueName" placeholder="قاعة الأفراح" value={data.venueName || ''} onChange={handle} />
         </FormField>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <FormField label="المدينة" required>
+          <SelectField
+            name="city"
+            value={data.city}
+            onChange={handle}
+            options={CITIES}
+            placeholder="اختر المدينة"
+          />
+        </FormField>
+        {data.city === 'أخرى' && (
+          <FormField label="اسم المدينة" required>
+            <Input name="customCity" placeholder="اكتب اسم المدينة" value={data.customCity || ''} onChange={handle} />
+          </FormField>
+        )}
       </div>
 
       <FormField label="رابط الموقع" hint="Google Maps أو أي رابط — اختياري">
