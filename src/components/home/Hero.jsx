@@ -342,7 +342,7 @@ export default function Hero() {
               >
                 <div className="flex items-center justify-center gap-1.5 mb-0.5">
                   <span className="text-base leading-none">{s.symbol}</span>
-                  <span className="text-xl sm:text-2xl font-bold font-arabic text-primary">{s.value}</span>
+                  <span className="text-xl sm:text-2xl font-bold font-arabic text-primary whitespace-nowrap">{s.value}</span>
                 </div>
                 <div className="text-text-muted text-[11px] sm:text-xs font-arabic">{s.label}</div>
               </div>

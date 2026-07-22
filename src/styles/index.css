@@ -59,6 +59,13 @@
     @apply w-full bg-card border border-border rounded-2xl px-5 py-3.5 text-text placeholder-text-muted/60 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 font-arabic text-sm;
   }
 
+  input[type="date"].luxury-input {
+    height: 3.5rem;
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 3.5rem;
+  }
+
   .section-scroll-offset {
     scroll-margin-top: 80px;
   }
