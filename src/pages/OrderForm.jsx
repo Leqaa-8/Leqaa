@@ -327,7 +327,7 @@ export default function OrderForm() {
             )}
             {step === 1 && templateId === 'custom' && (
               <div key="c">
-                <h2 className="text-lg font-bold text-text font-arabic mb-5">تفاصيل التصميم المخصص</h2>
+                <h2 className="text-lg font-bold text-text font-arabic mb-5">تفاصيل التصميم الخاص</h2>
                 <CustomForm data={formData} onChange={setFormData} />
               </div>
             )}
