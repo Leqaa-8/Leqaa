@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import TemplatesPage from './pages/TemplatesPage'
 import OrderForm from './pages/OrderForm'
 import PreviewPage from './pages/PreviewPage'
+import InvitationPage from './pages/InvitationPage'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -27,18 +28,36 @@ function Layout({ children }) {
   )
 }
 
+function AppContent() {
+  const location = useLocation()
+  const isInvitation = location.pathname.startsWith('/invitation')
+
+  if (isInvitation) {
+    return (
+      <Routes>
+        <Route path="/invitation/:id" element={<InvitationPage />} />
+        <Route path="/invitation" element={<InvitationPage />} />
+      </Routes>
+    )
+  }
+
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/templates" element={<TemplatesPage />} />
+        <Route path="/order" element={<OrderForm />} />
+        <Route path="/preview/:id" element={<PreviewPage />} />
+      </Routes>
+    </Layout>
+  )
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/templates" element={<TemplatesPage />} />
-          <Route path="/order" element={<OrderForm />} />
-          <Route path="/preview/:id" element={<PreviewPage />} />
-        </Routes>
-      </Layout>
+      <AppContent />
     </BrowserRouter>
   )
 }

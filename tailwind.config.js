@@ -33,11 +33,19 @@ export default {
         'gold-dark': '#80644F',
         dark: '#4E3C30',
         'dark-soft': '#5E4A3C',
+        // Invitation design system
+        'inv-bg': '#F8F4EF',
+        'inv-burgundy': '#5B0F1A',
+        'inv-burgundy-dark': '#430914',
+        'inv-gold': '#C8A96A',
+        'inv-gold-light': '#E8D4A0',
+        'inv-text': '#2B2B2B',
       },
       fontFamily: {
         arabic: ['Alexandria', 'Tajawal', 'sans-serif'],
         english: ['Poppins', 'sans-serif'],
         sans: ['Alexandria', 'Tajawal', 'Poppins', 'sans-serif'],
+        kufi: ['Noto Kufi Arabic', 'Alexandria', 'sans-serif'],
       },
       borderRadius: {
         '2xl': '1rem',

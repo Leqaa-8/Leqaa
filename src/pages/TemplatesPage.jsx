@@ -1,26 +1,51 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Eye, MousePointerClick, Clock, ArrowRight, X } from 'lucide-react'
+import {
+  Eye,
+  MousePointerClick,
+  Clock,
+  ArrowRight,
+  X,
+} from 'lucide-react'
 import SectionTitle from '../components/ui/SectionTitle'
 import { templates } from '../data/templates'
 
 function TemplateVideoPreview({ src, poster, title }) {
   return (
-    <div className="relative w-full overflow-hidden bg-blush" style={{ height: 320 }}>
+    <div
+      className="relative w-full overflow-hidden bg-blush"
+      style={{ height: 320 }}
+    >
       {poster && (
         <img
-          src={poster} alt="" aria-hidden="true"
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          src={poster}
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
         />
       )}
+
       <video
-        autoPlay muted loop playsInline preload="metadata"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
         aria-label={`معاينة فيديو ${title}`}
         style={{
-          position: 'absolute', inset: 0,
-          width: '100%', height: '100%',
-          objectFit: 'cover', display: 'block',
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          display: 'block',
         }}
       >
         <source src={src} type="video/mp4" />
@@ -43,7 +68,11 @@ function VideoModal({ src, title, onClose }) {
           initial={{ scale: 0.92, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.92, opacity: 0 }}
-          transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+          transition={{
+            type: 'spring',
+            stiffness: 260,
+            damping: 22,
+          }}
           className="relative bg-card rounded-3xl overflow-hidden shadow-luxury-lg w-full max-w-xs"
           onClick={(e) => e.stopPropagation()}
         >
@@ -54,15 +83,28 @@ function VideoModal({ src, title, onClose }) {
           >
             <X size={17} />
           </button>
+
           <video
-            autoPlay loop muted playsInline preload="metadata"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
             aria-label={`معاينة ${title}`}
-            style={{ display: 'block', width: '100%', aspectRatio: '9/16', objectFit: 'cover' }}
+            style={{
+              display: 'block',
+              width: '100%',
+              aspectRatio: '9/16',
+              objectFit: 'cover',
+            }}
           >
             <source src={src} type="video/mp4" />
           </video>
+
           <div className="p-4 text-center">
-            <p className="text-text font-semibold font-arabic text-sm">{title}</p>
+            <p className="text-text font-semibold font-arabic text-sm">
+              {title}
+            </p>
           </div>
         </motion.div>
       </motion.div>
@@ -75,22 +117,39 @@ function TemplateCard({ template, index }) {
 
   const handlePreview = () => {
     if (template.previewUrl) {
-      window.open(template.previewUrl, '_blank', 'noopener,noreferrer')
+      window.open(
+        template.previewUrl,
+        '_blank',
+        'noopener,noreferrer'
+      )
     } else {
       setModalOpen(true)
     }
   }
+
+  const isPortfolio = template.isPortfolio === true
 
   return (
     <>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: index * 0.12 }}
+        transition={{
+          duration: 0.6,
+          delay: index * 0.12,
+        }}
         whileHover={{ y: -5 }}
         className="group bg-card rounded-3xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-500 border border-border/60"
       >
-        <div className="overflow-hidden rounded-t-3xl">
+        <div className="relative overflow-hidden rounded-t-3xl">
+          {isPortfolio && (
+            <div className="absolute top-4 right-4 z-10">
+              <span className="inline-flex items-center bg-card/95 backdrop-blur-sm text-primary text-xs font-semibold font-arabic px-3 py-1.5 rounded-full shadow-sm border border-border/70">
+                من أعمال لقاء
+              </span>
+            </div>
+          )}
+
           <TemplateVideoPreview
             src={template.videoWeb}
             poster={template.poster}
@@ -99,25 +158,44 @@ function TemplateCard({ template, index }) {
         </div>
 
         <div className="p-6">
-          <h3 className="text-lg font-semibold text-text font-arabic mb-1.5">{template.name}</h3>
+          <h3 className="text-lg font-semibold text-text font-arabic mb-1.5">
+            {template.name}
+          </h3>
+
           <p className="text-text-muted text-sm leading-relaxed font-arabic font-light mb-4">
             {template.description}
           </p>
 
           <div className="flex flex-wrap gap-1.5 mb-4">
-            {template.features.map((f) => (
-              <span key={f} className="bg-blush text-text-muted text-xs px-3 py-1 rounded-full font-arabic">
-                {f}
+            {template.features.map((feature) => (
+              <span
+                key={feature}
+                className="bg-blush text-text-muted text-xs px-3 py-1 rounded-full font-arabic"
+              >
+                {feature}
               </span>
             ))}
           </div>
 
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-1.5 text-xs text-text-muted font-arabic">
-              <Clock size={12} className="text-primary flex-shrink-0" />
-              <span>وقت التنفيذ: {template.deliveryTime}</span>
+              <Clock
+                size={12}
+                className="text-primary flex-shrink-0"
+              />
+
+              <span>
+                {isPortfolio
+                  ? 'تصميم منفذ من لقاء'
+                  : `وقت التنفيذ: ${template.deliveryTime}`}
+              </span>
             </div>
-            <span className="text-primary font-bold font-arabic text-base">{template.price}</span>
+
+            <span className="text-primary font-bold font-arabic text-base">
+              {isPortfolio
+                ? 'من أعمال لقاء'
+                : template.price}
+            </span>
           </div>
 
           <div className="flex gap-3">
@@ -127,14 +205,25 @@ function TemplateCard({ template, index }) {
               className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-border text-text-muted font-medium py-2.5 rounded-2xl hover:border-primary hover:text-primary transition-all duration-300 text-sm font-arabic"
             >
               <Eye size={15} />
-              معاينة القالب
+
+              {isPortfolio
+                ? 'معاينة الدعوة'
+                : 'معاينة القالب'}
             </button>
+
             <Link
-              to={`/order?template=${template.id}`}
+              to={
+                isPortfolio
+                  ? '/order?template=custom'
+                  : `/order?template=${template.id}`
+              }
               className="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-gold text-white font-semibold py-2.5 rounded-2xl shadow-luxury hover:shadow-luxury-lg hover:-translate-y-0.5 transition-all duration-300 text-sm font-arabic"
             >
               <MousePointerClick size={15} />
-              اختيار القالب
+
+              {isPortfolio
+                ? 'اطلب تصميمًا مشابهًا'
+                : 'اختيار القالب'}
             </Link>
           </div>
         </div>
@@ -172,14 +261,18 @@ export default function TemplatesPage() {
 
         <SectionTitle
           label="Templates"
-          title="القوالب"
-          highlight="الجاهزة"
-          subtitle="قوالب صُممت بعناية لتناسب أجمل مناسباتك"
+          title="قوالب وأعمال"
+          highlight="لقاء"
+          subtitle="قوالب جاهزة وأعمال حقيقية صُممت بعناية لتناسب أجمل مناسباتك"
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-7">
           {templates.map((template, index) => (
-            <TemplateCard key={template.id} template={template} index={index} />
+            <TemplateCard
+              key={template.id}
+              template={template}
+              index={index}
+            />
           ))}
         </div>
       </div>

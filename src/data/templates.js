@@ -29,6 +29,48 @@ export const templates = [
     poster: '/images/poster-g.jpg',
     previewUrl: 'https://leqaa-8.github.io/graduation/',
   },
+  {
+    id: 'hoor',
+    type: 'graduation',
+    isPortfolio: true,
+    name: 'دعوة تخرج حور',
+    nameEn: 'Hoor Graduation',
+    description:
+      'دعوة تخرج تفاعلية بتصميم ناعم وأنيق صُممت خصيصًا للاحتفال بلحظة التخرج.',
+    features: [
+      'تصميم تفاعلي',
+      'تفاصيل الحفل',
+      'موقع المناسبة',
+      'موسيقى',
+      'مشاركة سهلة',
+    ],
+    price: '150 ',
+    deliveryTime: '٢٤–٤٨ ساعة',
+    icon: '🎓',
+    videoWeb: '/video/hoor.mp4',
+    previewUrl: 'https://leqaa-8.github.io/hoor/',
+  },
+{
+  id: 'geez',
+  type: 'opening',
+  isPortfolio: true,
+  name: 'دعوة افتتاح مقهى الجيز',
+  nameEn: 'Geez Opening',
+  description:
+    'دعوة افتتاح رقمية تفاعلية بتصميم فاخر يعرض تفاصيل المناسبة والموقع بطريقة مميزة.',
+  features: [
+    'افتتاح',
+    'تصميم خاص',
+    'خرائط',
+    'موسيقى',
+    'مشاركة سهلة',
+  ],
+  price: '150 ',
+  deliveryTime: '٢٤–٤٨ ساعة',
+  icon: '☕',
+  videoWeb: '/video/geez.mp4',
+  previewUrl: 'https://leqaa-8.github.io/GEEZ/',
+},
 ]
 
 export const getTemplateById = (id) => templates.find((t) => t.id === id)
